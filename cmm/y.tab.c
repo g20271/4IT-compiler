@@ -69,33 +69,34 @@
 /* First part of user prologue.  */
 #line 1 "cmm.y"
 
-/**
-   The cmm compiler
-   2004.08.18
-   2005.06.13
-   Hisashi Nakai, University of Tsukuba
-**/
-  
+	/**
+	   The cmm compiler
+	   2004.08.18
+	   2005.06.13
+	   Hisashi Nakai, University of Tsukuba
+	**/
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "env.h"
 #include "code.h"
 
-FILE *ofile;
+	FILE *ofile;
 
-int level = 0;
-int offset = 0; 
+	int level = 0;
+	int offset = 0;
 
-typedef struct Codeval {
-  cptr* code;
-  int   val;
-  char* name;
-} codeval;
+	typedef struct Codeval
+	{
+		cptr *code;
+		int val;
+		char *name;
+	} codeval;
 
 #define YYSTYPE codeval
 
-#line 99 "y.tab.c"
+#line 100 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -673,12 +674,12 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    49,    49,    66,    72,    75,    80,    91,   105,   117,
-     129,   142,   148,   156,   167,   173,   178,   185,   197,   211,
-     221,   228,   233,   238,   257,   275,   276,   277,   277,   284,
-     295,   308,   327,   348,   353,   358,   363,   368,   373,   380,
-     385,   390,   396,   401,   406,   412,   429,   451,   455,   462,
-     466,   473,   478,   485
+       0,    50,    50,    67,    73,    78,    82,    92,   105,   118,
+     132,   147,   152,   159,   169,   175,   179,   185,   199,   214,
+     226,   232,   237,   242,   263,   283,   283,   283,   283,   290,
+     300,   313,   331,   351,   356,   361,   366,   371,   376,   382,
+     387,   392,   397,   402,   407,   412,   432,   457,   461,   467,
+     471,   477,   482,   488
 };
 #endif
 
@@ -1303,606 +1304,628 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: fdecls main  */
-#line 49 "cmm.y"
-                      {
-            cptr *tmp;
-	    int label0;
+#line 51 "cmm.y"
+{
+	cptr *tmp;
+	int label0;
 
-	    label0 = makelabel();
+	label0 = makelabel();
 
-            tmp = makecode(O_JMP, 0, label0);
-	    tmp = mergecode(tmp, yyvsp[-1].code);
-	    tmp = mergecode(tmp, makecode(O_LAB, 0, label0));
-	    tmp = mergecode(tmp, makecode(O_INT, 0, yyvsp[0].val + SYSTEM_AREA));
-	    tmp = mergecode(tmp, yyvsp[0].code);
-            tmp = mergecode(tmp, makecode(O_OPR, 0, 0));
+	tmp = makecode(O_JMP, 0, label0);
+	tmp = mergecode(tmp, yyvsp[-1].code);
+	tmp = mergecode(tmp, makecode(O_LAB, 0, label0));
+	tmp = mergecode(tmp, makecode(O_INT, 0, yyvsp[0].val + SYSTEM_AREA));
+	tmp = mergecode(tmp, yyvsp[0].code);
+	tmp = mergecode(tmp, makecode(O_OPR, 0, 0));
 
-            printcode(ofile, tmp);
-	  }
-#line 1323 "y.tab.c"
+	printcode(ofile, tmp);
+}
+#line 1324 "y.tab.c"
     break;
 
   case 3: /* main: MAIN body  */
-#line 66 "cmm.y"
-                    {
-	    yyval.code = yyvsp[0].code;
-	    yyval.val = yyvsp[0].val;
-	  }
-#line 1332 "y.tab.c"
+#line 68 "cmm.y"
+{
+	yyval.code = yyvsp[0].code;
+	yyval.val = yyvsp[0].val;
+}
+#line 1333 "y.tab.c"
     break;
 
   case 4: /* fdecls: fdecls fdecl  */
-#line 72 "cmm.y"
-                       {
-	    yyval.code = mergecode(yyvsp[-1].code, yyvsp[0].code);
-	  }
-#line 1340 "y.tab.c"
+#line 74 "cmm.y"
+{
+	yyval.code = mergecode(yyvsp[-1].code, yyvsp[0].code);
+}
+#line 1341 "y.tab.c"
     break;
 
   case 5: /* fdecls: %empty  */
-#line 75 "cmm.y"
-                        {
-	    yyval.code = NULL;
-	  }
-#line 1348 "y.tab.c"
+#line 78 "cmm.y"
+{
+	yyval.code = NULL;
+}
+#line 1349 "y.tab.c"
     break;
 
   case 6: /* fdecl: fhead body  */
-#line 81 "cmm.y"
-          {
-            cptr *tmp, *tmp2;
+#line 83 "cmm.y"
+{
+	cptr *tmp, *tmp2;
 
-            tmp = makecode(O_LAB, 0, yyvsp[-1].val);
-            tmp2 = makecode(O_INT, 0, yyvsp[0].val + SYSTEM_AREA);
-	    yyval.code = mergecode(mergecode(tmp, tmp2), yyvsp[0].code);
-	    delete_block();
-	  }
-#line 1361 "y.tab.c"
+	tmp = makecode(O_LAB, 0, yyvsp[-1].val);
+	tmp2 = makecode(O_INT, 0, yyvsp[0].val + SYSTEM_AREA);
+	yyval.code = mergecode(mergecode(tmp, tmp2), yyvsp[0].code);
+	delete_block();
+}
+#line 1362 "y.tab.c"
     break;
 
   case 7: /* fhead: fid LPAR params RPAR  */
-#line 92 "cmm.y"
-          {
-	    int   label;
-	    int   i;
-	    list *tmp;
+#line 93 "cmm.y"
+{
+	int label;
+	int i;
+	list *tmp;
 
-	    label = makelabel();
+	label = makelabel();
 
-	    make_params(yyvsp[-1].val+1, label);
+	make_params(yyvsp[-1].val + 1, label);
 
-	    yyval.val = label;
-	  }
-#line 1377 "y.tab.c"
+	yyval.val = label;
+}
+#line 1378 "y.tab.c"
     break;
 
   case 8: /* fid: ID  */
 #line 106 "cmm.y"
-          {
-	    if (search_all(yyvsp[0].name) == NULL){
-	      addlist(yyvsp[0].name, FUNC, 0, level, 0);
-	    }
-	    else {
-	      sem_error1("fid");
-	    }
-	    addlist("block", BLOCK, 0, 0, 0);
-	  }
-#line 1391 "y.tab.c"
+{
+	if (search_all(yyvsp[0].name) == NULL)
+	{
+		addlist(yyvsp[0].name, FUNC, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("fid");
+	}
+	addlist("block", BLOCK, 0, 0, 0);
+}
+#line 1394 "y.tab.c"
     break;
 
   case 9: /* params: params COMMA ID  */
-#line 118 "cmm.y"
-          {
-	    if (search_block(yyvsp[0].name) == NULL){
-	      addlist(yyvsp[0].name, VARIABLE, 0, level, 0);
-	    }
-	    else {
-	      sem_error1("params");
-	    }
+#line 119 "cmm.y"
+{
+	if (search_block(yyvsp[0].name) == NULL)
+	{
+		addlist(yyvsp[0].name, VARIABLE, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("params");
+	}
 
-	    yyval.code = NULL;
-	    yyval.val = yyvsp[-2].val + 1;
-	  }
-#line 1407 "y.tab.c"
+	yyval.code = NULL;
+	yyval.val = yyvsp[-2].val + 1;
+}
+#line 1412 "y.tab.c"
     break;
 
   case 10: /* params: ID  */
-#line 130 "cmm.y"
-          {
-	    if (search_block(yyvsp[0].name) == NULL){
-	      addlist(yyvsp[0].name, VARIABLE, 0, level, 0);
-	    }
-	    else {
-	      sem_error1("params2");
-	    }
+#line 133 "cmm.y"
+{
+	if (search_block(yyvsp[0].name) == NULL)
+	{
+		addlist(yyvsp[0].name, VARIABLE, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("params2");
+	}
 
-	    yyval.code = NULL;
-	    yyval.val = 1;
-	  }
-#line 1423 "y.tab.c"
+	yyval.code = NULL;
+	yyval.val = 1;
+}
+#line 1430 "y.tab.c"
     break;
 
   case 11: /* params: %empty  */
-#line 142 "cmm.y"
-          {
-	    yyval.val = 0;
-	    yyval.code = NULL;
-	  }
-#line 1432 "y.tab.c"
+#line 147 "cmm.y"
+{
+	yyval.val = 0;
+	yyval.code = NULL;
+}
+#line 1439 "y.tab.c"
     break;
 
   case 12: /* body: LBRA vdaction stmts RBRA  */
-#line 149 "cmm.y"
-          {
-	    yyval.code = yyvsp[-1].code;
-	    yyval.val = yyvsp[-2].val + yyvsp[-1].val;
-	    offset = offset - yyvsp[-2].val;
-	  }
-#line 1442 "y.tab.c"
+#line 153 "cmm.y"
+{
+	yyval.code = yyvsp[-1].code;
+	yyval.val = yyvsp[-2].val + yyvsp[-1].val;
+	offset = offset - yyvsp[-2].val;
+}
+#line 1449 "y.tab.c"
     break;
 
   case 13: /* vdaction: vardecls  */
-#line 157 "cmm.y"
-          {
-	    int i;
+#line 160 "cmm.y"
+{
+	int i;
 
-	    vd_backpatch(yyvsp[0].val, offset);
+	vd_backpatch(yyvsp[0].val, offset);
 
-	    yyval.val = yyvsp[0].val;
-	    offset = offset + yyvsp[0].val;
-	  }
-#line 1455 "y.tab.c"
+	yyval.val = yyvsp[0].val;
+	offset = offset + yyvsp[0].val;
+}
+#line 1462 "y.tab.c"
     break;
 
   case 14: /* vardecls: vardecls vardecl  */
-#line 168 "cmm.y"
-          {
-	    yyval.val = yyvsp[-1].val + yyvsp[0].val;
-	    yyval.code = NULL;
-	  }
-#line 1464 "y.tab.c"
+#line 170 "cmm.y"
+{
+	yyval.val = yyvsp[-1].val + yyvsp[0].val;
+	yyval.code = NULL;
+}
+#line 1471 "y.tab.c"
     break;
 
   case 15: /* vardecls: %empty  */
-#line 173 "cmm.y"
-          {
-	    yyval.val = 0;
-	  }
-#line 1472 "y.tab.c"
+#line 175 "cmm.y"
+{
+	yyval.val = 0;
+}
+#line 1479 "y.tab.c"
     break;
 
   case 16: /* vardecl: VAR ids SEMI  */
-#line 179 "cmm.y"
-          {
-	    yyval.val = yyvsp[-1].val;
-	    yyval.code = NULL;
-	  }
-#line 1481 "y.tab.c"
+#line 180 "cmm.y"
+{
+	yyval.val = yyvsp[-1].val;
+	yyval.code = NULL;
+}
+#line 1488 "y.tab.c"
     break;
 
   case 17: /* ids: ids COMMA ID  */
 #line 186 "cmm.y"
-          {
-	    if (search_block(yyvsp[0].name) == NULL){
-	      addlist(yyvsp[0].name, VARIABLE, 0, level, 0);
-	    }
-	    else {
-	      sem_error1("var");
-	    }
+{
+	if (search_block(yyvsp[0].name) == NULL)
+	{
+		addlist(yyvsp[0].name, VARIABLE, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("var");
+	}
 
-	    yyval.code = NULL;
-	    yyval.val = yyvsp[-2].val + 1;
-	  }
-#line 1497 "y.tab.c"
+	yyval.code = NULL;
+	yyval.val = yyvsp[-2].val + 1;
+}
+#line 1506 "y.tab.c"
     break;
 
   case 18: /* ids: ID  */
-#line 198 "cmm.y"
-          {
-	    if (search_block(yyvsp[0].name) == NULL){
-	      addlist(yyvsp[0].name, VARIABLE, 0, level, 0);
-	    }
-	    else {
-	      sem_error1("var");
-	    }
+#line 200 "cmm.y"
+{
+	if (search_block(yyvsp[0].name) == NULL)
+	{
+		addlist(yyvsp[0].name, VARIABLE, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("var");
+	}
 
-	    yyval.code = NULL;
-	    yyval.val = 1;
-	  }
-#line 1513 "y.tab.c"
+	yyval.code = NULL;
+	yyval.val = 1;
+}
+#line 1524 "y.tab.c"
     break;
 
   case 19: /* stmts: stmts st  */
-#line 212 "cmm.y"
-          {
-	    yyval.code = mergecode(yyvsp[-1].code, yyvsp[0].code);
-	    if (yyvsp[-1].val < yyvsp[0].val){
-	      yyval.val = yyvsp[0].val;
-	    }
-	    else {
-	      yyval.val = yyvsp[-1].val;
-	    }
-	  }
-#line 1527 "y.tab.c"
+#line 215 "cmm.y"
+{
+	yyval.code = mergecode(yyvsp[-1].code, yyvsp[0].code);
+	if (yyvsp[-1].val < yyvsp[0].val)
+	{
+		yyval.val = yyvsp[0].val;
+	}
+	else
+	{
+		yyval.val = yyvsp[-1].val;
+	}
+}
+#line 1540 "y.tab.c"
     break;
 
   case 20: /* stmts: st  */
-#line 222 "cmm.y"
-          {
-	    yyval.code = yyvsp[0].code;
-	    yyval.val = yyvsp[0].val;
-	  }
-#line 1536 "y.tab.c"
+#line 227 "cmm.y"
+{
+	yyval.code = yyvsp[0].code;
+	yyval.val = yyvsp[0].val;
+}
+#line 1549 "y.tab.c"
     break;
 
   case 21: /* st: WRITE E SEMI  */
-#line 229 "cmm.y"
-          {
-	    yyval.code = mergecode(yyvsp[-1].code, makecode(O_CSP, 0, 1));
-	    yyval.val = 0;
-	  }
-#line 1545 "y.tab.c"
+#line 233 "cmm.y"
+{
+	yyval.code = mergecode(yyvsp[-1].code, makecode(O_CSP, 0, 1));
+	yyval.val = 0;
+}
+#line 1558 "y.tab.c"
     break;
 
   case 22: /* st: WRITELN SEMI  */
-#line 234 "cmm.y"
-          {
-	    yyval.code = makecode(O_CSP, 0, 2);
-	    yyval.val = 0;
-	  }
-#line 1554 "y.tab.c"
+#line 238 "cmm.y"
+{
+	yyval.code = makecode(O_CSP, 0, 2);
+	yyval.val = 0;
+}
+#line 1567 "y.tab.c"
     break;
 
   case 23: /* st: READ ID SEMI  */
-#line 239 "cmm.y"
-          {
-            cptr *tmp;
-	    list *tmp2;
+#line 243 "cmm.y"
+{
+	cptr *tmp;
+	list *tmp2;
 
-	    tmp2 = search_all(yyvsp[-1].name);
+	tmp2 = search_all(yyvsp[-1].name);
 
-	    if (tmp2 == NULL){
-	      sem_error2("read");
-	    }
+	if (tmp2 == NULL)
+	{
+		sem_error2("read");
+	}
 
-	    if (tmp2->kind != VARIABLE){
-	      sem_error2("as function");
-	    }
+	if (tmp2->kind != VARIABLE)
+	{
+		sem_error2("as function");
+	}
 
-	    yyval.code = mergecode(makecode(O_CSP, 0, 0),
-				makecode(O_STO, level - tmp2->l, tmp2->a));
-	    yyval.val = 0;
-	  }
-#line 1577 "y.tab.c"
+	yyval.code = mergecode(makecode(O_CSP, 0, 0),
+						makecode(O_STO, level - tmp2->l, tmp2->a));
+	yyval.val = 0;
+}
+#line 1592 "y.tab.c"
     break;
 
   case 24: /* st: ID COLEQ E SEMI  */
-#line 258 "cmm.y"
-          {
-	    list *tmp;
+#line 264 "cmm.y"
+{
+	list *tmp;
 
-	    tmp = search_all(yyvsp[-3].name);
+	tmp = search_all(yyvsp[-3].name);
 
-	    if (tmp == NULL){
-	      sem_error2("assignment");
-	    }
+	if (tmp == NULL)
+	{
+		sem_error2("assignment");
+	}
 
-	    if (tmp->kind != VARIABLE){
-	      sem_error2("assignment2");
-	    }
+	if (tmp->kind != VARIABLE)
+	{
+		sem_error2("assignment2");
+	}
 
-	    yyval.code = mergecode(yyvsp[-1].code,
-				makecode(O_STO, level - tmp->l, tmp->a));
-	    yyval.val = 0;
-	  }
-#line 1599 "y.tab.c"
+	yyval.code = mergecode(yyvsp[-1].code,
+						makecode(O_STO, level - tmp->l, tmp->a));
+	yyval.val = 0;
+}
+#line 1616 "y.tab.c"
     break;
 
   case 27: /* $@1: %empty  */
-#line 277 "cmm.y"
-          { addlist("block", BLOCK, 0, 0, 0); }
-#line 1605 "y.tab.c"
+#line 283 "cmm.y"
+                       { addlist("block", BLOCK, 0, 0, 0); }
+#line 1622 "y.tab.c"
     break;
 
   case 28: /* st: $@1 body  */
-#line 279 "cmm.y"
-          {
-	    yyval.code = yyvsp[0].code;
-	    yyval.val = yyvsp[0].val;
-	    delete_block();
-	  }
-#line 1615 "y.tab.c"
+#line 285 "cmm.y"
+{
+	yyval.code = yyvsp[0].code;
+	yyval.val = yyvsp[0].val;
+	delete_block();
+}
+#line 1632 "y.tab.c"
     break;
 
   case 29: /* st: RETURN E SEMI  */
-#line 285 "cmm.y"
-          {
-	    list* tmp2;
+#line 291 "cmm.y"
+{
+	list *tmp2;
 
-	    tmp2 = searchf(level);
+	tmp2 = searchf(level);
 
-	    yyval.code = mergecode(yyvsp[-1].code, makecode(O_RET, 0, tmp2->params));
-	    yyval.val = 0;
-	  }
-#line 1628 "y.tab.c"
-    break;
-
-  case 30: /* ifstmt: IF cond THEN st ENDIF SEMI  */
-#line 296 "cmm.y"
-          {
-	    cptr *tmp;
-	    int label0, label1;
-
-	    label0 = makelabel();
-
-	    tmp = mergecode(yyvsp[-4].code, makecode(O_JPC, 0, label0));
-	    tmp = mergecode(tmp, yyvsp[-2].code);
-
-	    yyval.code = mergecode(tmp, makecode(O_LAB, 0, label0));
-	    yyval.val = 0;
-	  }
+	yyval.code = mergecode(yyvsp[-1].code, makecode(O_RET, 0, tmp2->params));
+	yyval.val = 0;
+}
 #line 1645 "y.tab.c"
     break;
 
+  case 30: /* ifstmt: IF cond THEN st ENDIF SEMI  */
+#line 301 "cmm.y"
+{
+	cptr *tmp;
+	int label0, label1;
+
+	label0 = makelabel();
+
+	tmp = mergecode(yyvsp[-4].code, makecode(O_JPC, 0, label0));
+	tmp = mergecode(tmp, yyvsp[-2].code);
+
+	yyval.code = mergecode(tmp, makecode(O_LAB, 0, label0));
+	yyval.val = 0;
+}
+#line 1662 "y.tab.c"
+    break;
+
   case 31: /* ifstmt: IF cond THEN st ELSE st ENDIF SEMI  */
-#line 309 "cmm.y"
-          {
-	    cptr *tmp;
-	    int label0, label1;
+#line 314 "cmm.y"
+{
+	cptr *tmp;
+	int label0, label1;
 
-	    label0 = makelabel();
-	    label1 = makelabel();
+	label0 = makelabel();
+	label1 = makelabel();
 
-	    tmp = mergecode(yyvsp[-6].code, makecode(O_JPC, 0, label0));
-	    tmp = mergecode(tmp, yyvsp[-4].code);
-	    tmp = mergecode(tmp, makecode(O_JMP, 0, label1));
-	    tmp = mergecode(tmp, makecode(O_LAB, 0, label0));
-	    tmp = mergecode(tmp, yyvsp[-2].code);
+	tmp = mergecode(yyvsp[-6].code, makecode(O_JPC, 0, label0));
+	tmp = mergecode(tmp, yyvsp[-4].code);
+	tmp = mergecode(tmp, makecode(O_JMP, 0, label1));
+	tmp = mergecode(tmp, makecode(O_LAB, 0, label0));
+	tmp = mergecode(tmp, yyvsp[-2].code);
 
-	    yyval.code = mergecode(tmp, makecode(O_LAB, 0, label1));
-	    yyval.val = 0;
-	  }
-#line 1666 "y.tab.c"
+	yyval.code = mergecode(tmp, makecode(O_LAB, 0, label1));
+	yyval.val = 0;
+}
+#line 1683 "y.tab.c"
     break;
 
   case 32: /* whilestmt: WHILE cond DO st  */
-#line 328 "cmm.y"
-          {
-	    int label0, label1;
-	    cptr *tmp;
+#line 332 "cmm.y"
+{
+	int label0, label1;
+	cptr *tmp;
 
-	    label0 = makelabel();
-	    label1 = makelabel();
+	label0 = makelabel();
+	label1 = makelabel();
 
-	    tmp = makecode(O_LAB, 0, label0);
-	    tmp = mergecode(tmp, yyvsp[-2].code);
-	    tmp = mergecode(tmp, makecode(O_JPC, 0, label1));
-	    tmp = mergecode(tmp, yyvsp[0].code);
-	    tmp = mergecode(tmp, makecode(O_JMP, 0, label0));
-	    tmp = mergecode(tmp, makecode(O_LAB, 0, label1));
+	tmp = makecode(O_LAB, 0, label0);
+	tmp = mergecode(tmp, yyvsp[-2].code);
+	tmp = mergecode(tmp, makecode(O_JPC, 0, label1));
+	tmp = mergecode(tmp, yyvsp[0].code);
+	tmp = mergecode(tmp, makecode(O_JMP, 0, label0));
+	tmp = mergecode(tmp, makecode(O_LAB, 0, label1));
 
-	    yyval.code = tmp; 
-			
-	    yyval.val = 0;
-	  }
-#line 1689 "y.tab.c"
+	yyval.code = tmp;
+
+	yyval.val = 0;
+}
+#line 1706 "y.tab.c"
     break;
 
   case 33: /* cond: E GT E  */
-#line 349 "cmm.y"
-          {
-	    yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
-				makecode(O_OPR, 0, 12));
-	  }
-#line 1698 "y.tab.c"
+#line 352 "cmm.y"
+{
+	yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
+						makecode(O_OPR, 0, 12));
+}
+#line 1715 "y.tab.c"
     break;
 
   case 34: /* cond: E GE E  */
-#line 354 "cmm.y"
-          {
-	    yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
-				makecode(O_OPR, 0, 11));
-	  }
-#line 1707 "y.tab.c"
+#line 357 "cmm.y"
+{
+	yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
+						makecode(O_OPR, 0, 11));
+}
+#line 1724 "y.tab.c"
     break;
 
   case 35: /* cond: E LT E  */
-#line 359 "cmm.y"
-          {
-	    yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
-				makecode(O_OPR, 0, 10));
-	  }
-#line 1716 "y.tab.c"
+#line 362 "cmm.y"
+{
+	yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
+						makecode(O_OPR, 0, 10));
+}
+#line 1733 "y.tab.c"
     break;
 
   case 36: /* cond: E LE E  */
-#line 364 "cmm.y"
-          {
-	    yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
-				makecode(O_OPR, 0, 13));
-	  }
-#line 1725 "y.tab.c"
+#line 367 "cmm.y"
+{
+	yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
+						makecode(O_OPR, 0, 13));
+}
+#line 1742 "y.tab.c"
     break;
 
   case 37: /* cond: E NE E  */
-#line 369 "cmm.y"
-          {
-	    yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
-				makecode(O_OPR, 0, 9));
-	  }
-#line 1734 "y.tab.c"
+#line 372 "cmm.y"
+{
+	yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
+						makecode(O_OPR, 0, 9));
+}
+#line 1751 "y.tab.c"
     break;
 
   case 38: /* cond: E EQ E  */
-#line 374 "cmm.y"
-          {
-	    yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
-				makecode(O_OPR, 0, 8));
-	  }
-#line 1743 "y.tab.c"
+#line 377 "cmm.y"
+{
+	yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
+						makecode(O_OPR, 0, 8));
+}
+#line 1760 "y.tab.c"
     break;
 
   case 39: /* E: E PLUS T  */
-#line 381 "cmm.y"
-          {
-            yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
-				makecode(O_OPR, 0, 2));
-          }
-#line 1752 "y.tab.c"
-    break;
-
-  case 40: /* E: E MINUS T  */
-#line 386 "cmm.y"
-          {
-            yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
-				makecode(O_OPR, 0, 3));
-          }
-#line 1761 "y.tab.c"
-    break;
-
-  case 41: /* E: T  */
-#line 391 "cmm.y"
-          {
-            yyval.code = yyvsp[0].code;
-          }
+#line 383 "cmm.y"
+{
+	yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
+						makecode(O_OPR, 0, 2));
+}
 #line 1769 "y.tab.c"
     break;
 
-  case 42: /* T: T MULT F  */
-#line 397 "cmm.y"
-          {
-            yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
-				makecode(O_OPR, 0, 4));
-          }
+  case 40: /* E: E MINUS T  */
+#line 388 "cmm.y"
+{
+	yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
+						makecode(O_OPR, 0, 3));
+}
 #line 1778 "y.tab.c"
     break;
 
+  case 41: /* E: T  */
+#line 393 "cmm.y"
+{
+	yyval.code = yyvsp[0].code;
+}
+#line 1786 "y.tab.c"
+    break;
+
+  case 42: /* T: T MULT F  */
+#line 398 "cmm.y"
+{
+	yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
+						makecode(O_OPR, 0, 4));
+}
+#line 1795 "y.tab.c"
+    break;
+
   case 43: /* T: T DIV F  */
-#line 402 "cmm.y"
-          {
-            yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
-				makecode(O_OPR, 0, 5));
-          }
-#line 1787 "y.tab.c"
+#line 403 "cmm.y"
+{
+	yyval.code = mergecode(mergecode(yyvsp[-2].code, yyvsp[0].code),
+						makecode(O_OPR, 0, 5));
+}
+#line 1804 "y.tab.c"
     break;
 
   case 44: /* T: F  */
-#line 407 "cmm.y"
-          {
-            yyval.code = yyvsp[0].code;
-          }
-#line 1795 "y.tab.c"
+#line 408 "cmm.y"
+{
+	yyval.code = yyvsp[0].code;
+}
+#line 1812 "y.tab.c"
     break;
 
   case 45: /* F: ID  */
 #line 413 "cmm.y"
-          {
-	    cptr *tmpc;
-	    list* tmpl;
+{
+	cptr *tmpc;
+	list *tmpl;
 
-	    tmpl = search_all(yyvsp[0].name);
-	    if (tmpl == NULL){
-	      sem_error2("id");
-	    }
+	tmpl = search_all(yyvsp[0].name);
+	if (tmpl == NULL)
+	{
+		sem_error2("id");
+	}
 
-	    if (tmpl->kind == VARIABLE){
-	      yyval.code = makecode(O_LOD, level - tmpl->l, tmpl->a);
-	    }
-	    else {
-	      sem_error2("id as variable");
-	    }
-	  }
-#line 1816 "y.tab.c"
+	if (tmpl->kind == VARIABLE)
+	{
+		yyval.code = makecode(O_LOD, level - tmpl->l, tmpl->a);
+	}
+	else
+	{
+		sem_error2("id as variable");
+	}
+}
+#line 1836 "y.tab.c"
     break;
 
   case 46: /* F: ID LPAR fparams RPAR  */
-#line 430 "cmm.y"
-          {
-	    list* tmpl;
+#line 433 "cmm.y"
+{
+	list *tmpl;
 
-	    tmpl = search_all(yyvsp[-3].name);
-	    if (tmpl == NULL){
-	      sem_error2("id as function");
-	    }
+	tmpl = search_all(yyvsp[-3].name);
+	if (tmpl == NULL)
+	{
+		sem_error2("id as function");
+	}
 
-	    if (tmpl->kind != FUNC){
-	      sem_error2("id as function2");
-	    }
+	if (tmpl->kind != FUNC)
+	{
+		sem_error2("id as function2");
+	}
 
-	    if (tmpl->params != yyvsp[-1].val){
-	      sem_error3(tmpl->name, tmpl->params, yyvsp[-1].val);
-	    }
+	if (tmpl->params != yyvsp[-1].val)
+	{
+		sem_error3(tmpl->name, tmpl->params, yyvsp[-1].val);
+	}
 
-	    yyval.code = mergecode(yyvsp[-1].code,
-				makecode(O_CAL,
-					 level - tmpl->l,
-					 tmpl->a));
-	  }
-#line 1842 "y.tab.c"
+	yyval.code = mergecode(yyvsp[-1].code,
+						makecode(O_CAL,
+								 level - tmpl->l,
+								 tmpl->a));
+}
+#line 1865 "y.tab.c"
     break;
 
   case 47: /* F: NUMBER  */
-#line 452 "cmm.y"
-          {
-	    yyval.code = makecode(O_LIT, 0, yylval.val);
-	  }
-#line 1850 "y.tab.c"
+#line 458 "cmm.y"
+{
+	yyval.code = makecode(O_LIT, 0, yylval.val);
+}
+#line 1873 "y.tab.c"
     break;
 
   case 48: /* F: LPAR E RPAR  */
-#line 456 "cmm.y"
-          {
-	    yyval.code = yyvsp[-1].code;
-	  }
-#line 1858 "y.tab.c"
+#line 462 "cmm.y"
+{
+	yyval.code = yyvsp[-1].code;
+}
+#line 1881 "y.tab.c"
     break;
 
   case 49: /* fparams: %empty  */
-#line 462 "cmm.y"
-          {
-	    yyval.val = 0;
-	    yyval.code = NULL;
-	  }
-#line 1867 "y.tab.c"
+#line 467 "cmm.y"
+{
+	yyval.val = 0;
+	yyval.code = NULL;
+}
+#line 1890 "y.tab.c"
     break;
 
   case 50: /* fparams: ac_params  */
-#line 467 "cmm.y"
-          {
-	    yyval.val = yyvsp[0].val;
-	    yyval.code = yyvsp[0].code;
-	  }
-#line 1876 "y.tab.c"
+#line 472 "cmm.y"
+{
+	yyval.val = yyvsp[0].val;
+	yyval.code = yyvsp[0].code;
+}
+#line 1899 "y.tab.c"
     break;
 
   case 51: /* ac_params: ac_params COMMA fparam  */
-#line 474 "cmm.y"
-          {
-	    yyval.val = yyvsp[-2].val + 1;
-	    yyval.code = mergecode(yyvsp[-2].code, yyvsp[0].code);
-	  }
-#line 1885 "y.tab.c"
+#line 478 "cmm.y"
+{
+	yyval.val = yyvsp[-2].val + 1;
+	yyval.code = mergecode(yyvsp[-2].code, yyvsp[0].code);
+}
+#line 1908 "y.tab.c"
     break;
 
   case 52: /* ac_params: fparam  */
-#line 479 "cmm.y"
-          {
-	    yyval.val = 1;
-	    yyval.code = yyvsp[0].code;
-	  }
-#line 1894 "y.tab.c"
+#line 483 "cmm.y"
+{
+	yyval.val = 1;
+	yyval.code = yyvsp[0].code;
+}
+#line 1917 "y.tab.c"
     break;
 
   case 53: /* fparam: E  */
-#line 486 "cmm.y"
-          {
-	    yyval.code = yyvsp[0].code;
-	  }
-#line 1902 "y.tab.c"
+#line 489 "cmm.y"
+{
+	yyval.code = yyvsp[0].code;
+}
+#line 1925 "y.tab.c"
     break;
 
 
-#line 1906 "y.tab.c"
+#line 1929 "y.tab.c"
 
       default: break;
     }
@@ -2095,27 +2118,30 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 490 "cmm.y"
+#line 492 "cmm.y"
 
 
 #include "lex.yy.c"
 
-int main(void){
-  ofile = fopen("code.output", "w");
+	int main(void)
+{
+	ofile = fopen("code.output", "w");
 
-  if (ofile == NULL){
-    perror("ofile");
-    exit(EXIT_FAILURE);
-  }
+	if (ofile == NULL)
+	{
+		perror("ofile");
+		exit(EXIT_FAILURE);
+	}
 
-  initialize();
-  yyparse();
+	initialize();
+	yyparse();
 
-  if (fclose(ofile) != 0){
-    perror("ofile");
-    exit(EXIT_FAILURE);
-  }
-  return 0;
+	if (fclose(ofile) != 0)
+	{
+		perror("ofile");
+		exit(EXIT_FAILURE);
+	}
+	return 0;
 }
 
 int yywrap(void)
@@ -2129,4 +2155,3 @@ int yyerror(char const *str)
 	fprintf(stderr, "parser error near %s\n", yytext);
 	return 0;
 }
-
