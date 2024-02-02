@@ -1,0 +1,3 @@
+cmm/lex.yy.cmm
+cmm/code.output
+cmm/y.tab.c
