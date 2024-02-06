@@ -242,44 +242,44 @@ st : WRITE E SEMI
 }
 | READ ID SEMI
 {
-	// cptr *tmp;
-	// list *tmp2;
+	cptr *tmp;
+	list *tmp2;
 
-	// tmp2 = search_all($2.name);
+	tmp2 = search_all($2.name);
 
-	// if (tmp2 == NULL)
-	// {
-	// 	sem_error2("read");
-	// }
+	if (tmp2 == NULL)
+	{
+		sem_error2("read");
+	}
 
 	// if (tmp2->kind != VARIABLE)
 	// {
 	// 	sem_error2("as function");
 	// }
 
-	// $$.code = mergecode(makecode(O_CSP, 0, 0),
-	// 					makecode(O_STO, level - tmp2->l, tmp2->a));
-	// $$.val = 0;
+	$$.code = mergecode(makecode(O_CSP, 0, 0),
+						makecode(O_STO, level - tmp2->l, tmp2->a));
+	$$.val = 0;
 }
 | ID COLEQ E SEMI
 {
-	// list *tmp;
+	list *tmp;
 
-	// tmp = search_all($1.name);
+	tmp = search_all($1.name);
 
-	// if (tmp == NULL)
-	// {
-	// 	sem_error2("assignment");
-	// }
+	if (tmp == NULL)
+	{
+		sem_error2("assignment");
+	}
 
-	// if (tmp->kind != VARIABLE)
-	// {
-	// 	sem_error2("assignment2");
-	// }
+	if (tmp->kind != VARIABLE)
+	{
+		sem_error2("assignment2");
+	}
 
-	// $$.code = mergecode($3.code,
-	// 					makecode(O_STO, level - tmp->l, tmp->a));
-	// $$.val = 0;
+	$$.code = mergecode($3.code,
+						makecode(O_STO, level - tmp->l, tmp->a));
+	$$.val = 0;
 }
 | ifstmt | whilestmt | { addlist("block", BLOCK, 0, 0, 0); }
 body
