@@ -284,100 +284,100 @@ st : WRITE E SEMI
 | ifstmt | whilestmt | { addlist("block", BLOCK, 0, 0, 0); }
 body
 {
-// 	$$.code = $2.code;
-// 	$$.val = $2.val;
-// 	delete_block();
+	$$.code = $2.code;
+	$$.val = $2.val;
+	delete_block();
 }
 | RETURN E SEMI
 {
-// 	list *tmp2;
+	list *tmp2;
 
-// 	tmp2 = searchf(level);
+	tmp2 = searchf(level);
 
-// 	$$.code = mergecode($2.code, makecode(O_RET, 0, tmp2->params));
-// 	$$.val = 0;
+	$$.code = mergecode($2.code, makecode(O_RET, 0, tmp2->params));
+	$$.val = 0;
 };
 
 ifstmt : IF cond THEN st ENDIF SEMI
 {
-	// cptr *tmp;
-	// int label0, label1;
+	cptr *tmp;
+	int label0, label1;
 
-	// label0 = makelabel();
+	label0 = makelabel();
 
-	// tmp = mergecode($2.code, makecode(O_JPC, 0, label0));
-	// tmp = mergecode(tmp, $4.code);
+	tmp = mergecode($2.code, makecode(O_JPC, 0, label0));
+	tmp = mergecode(tmp, $4.code);
 
-	// $$.code = mergecode(tmp, makecode(O_LAB, 0, label0));
-	// $$.val = 0;
+	$$.code = mergecode(tmp, makecode(O_LAB, 0, label0));
+	$$.val = 0;
 }
 | IF cond THEN st ELSE st ENDIF SEMI
 {
-	// cptr *tmp;
-	// int label0, label1;
+	cptr *tmp;
+	int label0, label1;
 
-	// label0 = makelabel();
-	// label1 = makelabel();
+	label0 = makelabel();
+	label1 = makelabel();
 
-	// tmp = mergecode($2.code, makecode(O_JPC, 0, label0));
-	// tmp = mergecode(tmp, $4.code);
-	// tmp = mergecode(tmp, makecode(O_JMP, 0, label1));
-	// tmp = mergecode(tmp, makecode(O_LAB, 0, label0));
-	// tmp = mergecode(tmp, $6.code);
+	tmp = mergecode($2.code, makecode(O_JPC, 0, label0));
+	tmp = mergecode(tmp, $4.code);
+	tmp = mergecode(tmp, makecode(O_JMP, 0, label1));
+	tmp = mergecode(tmp, makecode(O_LAB, 0, label0));
+	tmp = mergecode(tmp, $6.code);
 
-	// $$.code = mergecode(tmp, makecode(O_LAB, 0, label1));
-	// $$.val = 0;
+	$$.code = mergecode(tmp, makecode(O_LAB, 0, label1));
+	$$.val = 0;
 };
 
 whilestmt : WHILE cond DO st
 {
-	// int label0, label1;
-	// cptr *tmp;
+	int label0, label1;
+	cptr *tmp;
 
-	// label0 = makelabel();
-	// label1 = makelabel();
+	label0 = makelabel();
+	label1 = makelabel();
 
-	// tmp = makecode(O_LAB, 0, label0);
-	// tmp = mergecode(tmp, $2.code);
-	// tmp = mergecode(tmp, makecode(O_JPC, 0, label1));
-	// tmp = mergecode(tmp, $4.code);
-	// tmp = mergecode(tmp, makecode(O_JMP, 0, label0));
-	// tmp = mergecode(tmp, makecode(O_LAB, 0, label1));
+	tmp = makecode(O_LAB, 0, label0);
+	tmp = mergecode(tmp, $2.code);
+	tmp = mergecode(tmp, makecode(O_JPC, 0, label1));
+	tmp = mergecode(tmp, $4.code);
+	tmp = mergecode(tmp, makecode(O_JMP, 0, label0));
+	tmp = mergecode(tmp, makecode(O_LAB, 0, label1));
 
-	// $$.code = tmp;
+	$$.code = tmp;
 
-	// $$.val = 0;
+	$$.val = 0;
 };
 
 cond : E GT E
 {
-	// $$.code = mergecode(mergecode($1.code, $3.code),
-	// 					makecode(O_OPR, 0, 12));
+	$$.code = mergecode(mergecode($1.code, $3.code),
+						makecode(O_OPR, 0, 12));
 }
 | E GE E
 {
-	// $$.code = mergecode(mergecode($1.code, $3.code),
-	// 					makecode(O_OPR, 0, 11));
+	$$.code = mergecode(mergecode($1.code, $3.code),
+						makecode(O_OPR, 0, 11));
 }
 | E LT E
 {
-	// $$.code = mergecode(mergecode($1.code, $3.code),
-	// 					makecode(O_OPR, 0, 10));
+	$$.code = mergecode(mergecode($1.code, $3.code),
+						makecode(O_OPR, 0, 10));
 }
 | E LE E
 {
-	// $$.code = mergecode(mergecode($1.code, $3.code),
-	// 					makecode(O_OPR, 0, 13));
+	$$.code = mergecode(mergecode($1.code, $3.code),
+						makecode(O_OPR, 0, 13));
 }
 | E NE E
 {
-	// $$.code = mergecode(mergecode($1.code, $3.code),
-	// 					makecode(O_OPR, 0, 9));
+	$$.code = mergecode(mergecode($1.code, $3.code),
+						makecode(O_OPR, 0, 9));
 }
 | E EQ E
 {
-	// $$.code = mergecode(mergecode($1.code, $3.code),
-	// 					makecode(O_OPR, 0, 8));
+	$$.code = mergecode(mergecode($1.code, $3.code),
+						makecode(O_OPR, 0, 8));
 };
 
 E : E PLUS T
