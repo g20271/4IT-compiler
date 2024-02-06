@@ -154,17 +154,17 @@ body : LBRA vdaction stmts RBRA
 {
 	$$.code = $3.code;
 	$$.val = $2.val + $3.val;
-	// offset = offset - $2.val;
+	offset = offset - $2.val;
 };
 
 vdaction : vardecls
 {
 	// int i;
 
-	// vd_backpatch($1.val, offset);
+	vd_backpatch($1.val, offset);
 
-	// $$.val = $1.val;
-	// offset = offset + $1.val;
+	$$.val = $1.val;
+	offset = offset + $1.val;
 };
 
 vardecls : vardecls vardecl
@@ -412,23 +412,23 @@ T : T MULT F
 
 F : ID
 {
-	// cptr *tmpc;
-	// list *tmpl;
+	cptr *tmpc;
+	list *tmpl;
 
-	// tmpl = search_all($1.name);
-	// if (tmpl == NULL)
-	// {
-	// 	sem_error2("id");
-	// }
+	tmpl = search_all($1.name);
+	if (tmpl == NULL)
+	{
+		sem_error2("id");
+	}
 
-	// if (tmpl->kind == VARIABLE)
-	// {
-	// 	$$.code = makecode(O_LOD, level - tmpl->l, tmpl->a);
-	// }
-	// else
-	// {
-	// 	sem_error2("id as variable");
-	// }
+	if (tmpl->kind == VARIABLE)
+	{
+		$$.code = makecode(O_LOD, level - tmpl->l, tmpl->a);
+	}
+	else
+	{
+		sem_error2("id as variable");
+	}
 }
 | ID LPAR fparams RPAR
 {
