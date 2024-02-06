@@ -118,36 +118,36 @@ fid : ID
 
 params : params COMMA ID
 {
-	// if (search_block($3.name) == NULL)
-	// {
-	// 	addlist($3.name, VARIABLE, 0, level, 0);
-	// }
-	// else
-	// {
-	// 	sem_error1("params");
-	// }
+	if (search_block($3.name) == NULL)
+	{
+		addlist($3.name, VARIABLE, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("params");
+	}
 
-	// $$.code = NULL;
-	// $$.val = $1.val + 1;
+	$$.code = NULL;
+	$$.val = $1.val + 1;
 }
 | ID
 {
-// 	if (search_block($1.name) == NULL)
-// 	{
-// 		addlist($1.name, VARIABLE, 0, level, 0);
-// 	}
-// 	else
-// 	{
-// 		sem_error1("params2");
-// 	}
+	if (search_block($1.name) == NULL)
+	{
+		addlist($1.name, VARIABLE, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("params2");
+	}
 
-// 	$$.code = NULL;
-// 	$$.val = 1;
-// }
-// | /* epsilon */
-// {
-// 	$$.val = 0;
-// 	$$.code = NULL;
+	$$.code = NULL;
+	$$.val = 1;
+}
+| /* epsilon */
+{
+	$$.val = 0;
+	$$.code = NULL;
 };
 
 body : LBRA vdaction stmts RBRA
