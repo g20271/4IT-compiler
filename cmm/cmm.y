@@ -50,13 +50,13 @@
 program : fdecls main
 {
 	cptr *tmp = NULL;
-	// int label0;
+	int label0;
 
-	// label0 = makelabel();
+	label0 = makelabel();
 
-	// tmp = makecode(O_JMP, 0, label0);
-	// tmp = mergecode(tmp, $1.code);
-	// tmp = mergecode(tmp, makecode(O_LAB, 0, label0));
+	tmp = makecode(O_JMP, 0, label0);
+	tmp = mergecode(tmp, $1.code);
+	tmp = mergecode(tmp, makecode(O_LAB, 0, label0));
 	tmp = mergecode(tmp, makecode(O_INT, 0, $2.val + SYSTEM_AREA));
 	tmp = mergecode(tmp, $2.code);
 	tmp = mergecode(tmp, makecode(O_OPR, 0, 0));
@@ -73,11 +73,11 @@ main : MAIN body
 
 fdecls : fdecls fdecl
 {
-// 	$$.code = mergecode($1.code, $2.code);
+	$$.code = mergecode($1.code, $2.code);
 }
 | /* epsilon */
 {
-// 	$$.code = NULL;
+	$$.code = NULL;
 };
 
 fdecl : fhead body
@@ -92,62 +92,62 @@ fdecl : fhead body
 
 fhead : fid LPAR params RPAR
 {
-	// int label;
-	// int i;
-	// list *tmp;
+	int label;
+	int i;
+	list *tmp;
 
-	// label = makelabel();
+	label = makelabel();
 
-	// make_params($3.val + 1, label);
+	make_params($3.val + 1, label);
 
-	// $$.val = label;
+	$$.val = label;
 };
 
 fid : ID
 {
-	// if (search_all($1.name) == NULL)
-	// {
-	// 	addlist($1.name, FUNC, 0, level, 0);
-	// }
-	// else
-	// {
-	// 	sem_error1("fid");
-	// }
-	// addlist("block", BLOCK, 0, 0, 0);
+	if (search_all($1.name) == NULL)
+	{
+		addlist($1.name, FUNC, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("fid");
+	}
+	addlist("block", BLOCK, 0, 0, 0);
 };
 
 params : params COMMA ID
 {
-	// if (search_block($3.name) == NULL)
-	// {
-	// 	addlist($3.name, VARIABLE, 0, level, 0);
-	// }
-	// else
-	// {
-	// 	sem_error1("params");
-	// }
+	if (search_block($3.name) == NULL)
+	{
+		addlist($3.name, VARIABLE, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("params");
+	}
 
-	// $$.code = NULL;
-	// $$.val = $1.val + 1;
+	$$.code = NULL;
+	$$.val = $1.val + 1;
 }
 | ID
 {
-// 	if (search_block($1.name) == NULL)
-// 	{
-// 		addlist($1.name, VARIABLE, 0, level, 0);
-// 	}
-// 	else
-// 	{
-// 		sem_error1("params2");
-// 	}
+	if (search_block($1.name) == NULL)
+	{
+		addlist($1.name, VARIABLE, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("params2");
+	}
 
-// 	$$.code = NULL;
-// 	$$.val = 1;
-// }
-// | /* epsilon */
-// {
-// 	$$.val = 0;
-// 	$$.code = NULL;
+	$$.code = NULL;
+	$$.val = 1;
+}
+| /* epsilon */
+{
+	$$.val = 0;
+	$$.code = NULL;
 };
 
 body : LBRA vdaction stmts RBRA
@@ -432,28 +432,28 @@ F : ID
 }
 | ID LPAR fparams RPAR
 {
-	// list *tmpl;
+	list *tmpl;
 
-	// tmpl = search_all($1.name);
-	// if (tmpl == NULL)
-	// {
-	// 	sem_error2("id as function");
-	// }
+	tmpl = search_all($1.name);
+	if (tmpl == NULL)
+	{
+		sem_error2("id as function");
+	}
 
-	// if (tmpl->kind != FUNC)
-	// {
-	// 	sem_error2("id as function2");
-	// }
+	if (tmpl->kind != FUNC)
+	{
+		sem_error2("id as function2");
+	}
 
-	// if (tmpl->params != $3.val)
-	// {
-	// 	sem_error3(tmpl->name, tmpl->params, $3.val);
-	// }
+	if (tmpl->params != $3.val)
+	{
+		sem_error3(tmpl->name, tmpl->params, $3.val);
+	}
 
-	// $$.code = mergecode($3.code,
-	// 					makecode(O_CAL,
-	// 							 level - tmpl->l,
-	// 							 tmpl->a));
+	$$.code = mergecode($3.code,
+						makecode(O_CAL,
+								 level - tmpl->l,
+								 tmpl->a));
 }
 | NUMBER
 {
@@ -466,29 +466,29 @@ F : ID
 
 fparams: /* epsilon */
 {
-	// $$.val = 0;
-	// $$.code = NULL;
+	$$.val = 0;
+	$$.code = NULL;
 }
 | ac_params
 {
-	// $$.val = $1.val;
-	// $$.code = $1.code;
+	$$.val = $1.val;
+	$$.code = $1.code;
 };
 
 ac_params : ac_params COMMA fparam
 {
-	// $$.val = $1.val + 1;
-	// $$.code = mergecode($1.code, $3.code);
+	$$.val = $1.val + 1;
+	$$.code = mergecode($1.code, $3.code);
 }
 | fparam
 {
-	// $$.val = 1;
-	// $$.code = $1.code;
+	$$.val = 1;
+	$$.code = $1.code;
 };
 
 fparam : E
 {
-	// $$.code = $1.code;
+	$$.code = $1.code;
 };
 %%
 
