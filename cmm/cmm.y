@@ -382,28 +382,28 @@ cond : E GT E
 
 E : E PLUS T
 {
-	// $$.code = mergecode(mergecode($1.code, $3.code),
-	// 					makecode(O_OPR, 0, 2));
+	$$.code = mergecode(mergecode($1.code, $3.code),
+						makecode(O_OPR, 0, 2));
 }
 | E MINUS T
 {
-	// $$.code = mergecode(mergecode($1.code, $3.code),
-	// 					makecode(O_OPR, 0, 3));
+	$$.code = mergecode(mergecode($1.code, $3.code),
+						makecode(O_OPR, 0, 3));
 }
 | T
 {
-	// $$.code = $1.code;
+	$$.code = $1.code;
 };
 
 T : T MULT F
 {
-	// $$.code = mergecode(mergecode($1.code, $3.code),
-	// 					makecode(O_OPR, 0, 4));
+	$$.code = mergecode(mergecode($1.code, $3.code),
+						makecode(O_OPR, 0, 4));
 }
 | T DIV F
 {
-	// $$.code = mergecode(mergecode($1.code, $3.code),
-	// 					makecode(O_OPR, 0, 5));
+	$$.code = mergecode(mergecode($1.code, $3.code),
+						makecode(O_OPR, 0, 5));
 }
 | F
 {
@@ -461,7 +461,7 @@ F : ID
 }
 | LPAR E RPAR
 {
-	// $$.code = $2.code;
+	$$.code = $2.code;
 };
 
 fparams: /* epsilon */
