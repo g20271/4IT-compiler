@@ -82,12 +82,12 @@ fdecls : fdecls fdecl
 
 fdecl : fhead body
 {
-	// cptr *tmp, *tmp2;
+	cptr *tmp, *tmp2;
 
-	// tmp = makecode(O_LAB, 0, $1.val);
-	// tmp2 = makecode(O_INT, 0, $2.val + SYSTEM_AREA);
-	// $$.code = mergecode(mergecode(tmp, tmp2), $2.code);
-	// delete_block();
+	tmp = makecode(O_LAB, 0, $1.val);
+	tmp2 = makecode(O_INT, 0, $2.val + SYSTEM_AREA);
+	$$.code = mergecode(mergecode(tmp, tmp2), $2.code);
+	delete_block();
 };
 
 fhead : fid LPAR params RPAR
@@ -153,7 +153,7 @@ params : params COMMA ID
 body : LBRA vdaction stmts RBRA
 {
 	$$.code = $3.code;
-	// $$.val = $2.val + $3.val;
+	$$.val = $2.val + $3.val;
 	// offset = offset - $2.val;
 };
 
@@ -169,47 +169,47 @@ vdaction : vardecls
 
 vardecls : vardecls vardecl
 {
-	// $$.val = $1.val + $2.val;
-	// $$.code = NULL;
+	$$.val = $1.val + $2.val;
+	$$.code = NULL;
 }
 | /* epsilon */
 {
-	// $$.val = 0;
+	$$.val = 0;
 };
 
 vardecl : VAR ids SEMI
 {
-	// $$.val = $2.val;
-	// $$.code = NULL;
+	$$.val = $2.val;
+	$$.code = NULL;
 };
 
 ids : ids COMMA ID
 {
-	// if (search_block($3.name) == NULL)
-	// {
-	// 	addlist($3.name, VARIABLE, 0, level, 0);
-	// }
-	// else
-	// {
-	// 	sem_error1("var");
-	// }
+	if (search_block($3.name) == NULL)
+	{
+		addlist($3.name, VARIABLE, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("var");
+	}
 
-	// $$.code = NULL;
-	// $$.val = $1.val + 1;
+	$$.code = NULL;
+	$$.val = $1.val + 1;
 }
 | ID
 {
-	// if (search_block($1.name) == NULL)
-	// {
-	// 	addlist($1.name, VARIABLE, 0, level, 0);
-	// }
-	// else
-	// {
-	// 	sem_error1("var");
-	// }
+	if (search_block($1.name) == NULL)
+	{
+		addlist($1.name, VARIABLE, 0, level, 0);
+	}
+	else
+	{
+		sem_error1("var");
+	}
 
-	// $$.code = NULL;
-	// $$.val = 1;
+	$$.code = NULL;
+	$$.val = 1;
 };
 
 stmts : stmts st
